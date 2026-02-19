@@ -1,34 +1,27 @@
 package config
 
 import (
-	"fmt"
 	"os"
+
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
 	PublicHost string
 	Port       string
-	DBUser     string
-	DBPassword string
-	DBAdress   string
-	DBName     string
+	DBConnStr  string
 }
 
 var Envs = initConfig()
 
-func initConfig() Config{
+func initConfig() Config {
 	godotenv.Load()
 	return Config{
 		PublicHost: getEnv("PUBLIC_HOST", "http://localhost"),
 		Port:       getEnv("PORT", "8080"),
-		DBUser:     getEnv("DB_USER", "root"),
-		DBPassword: getEnv("DB_PASSWORD", "password"),
-		DBAdress:   fmt.Sprintf("%s:%s", getEnv("DB_HOST", "127.0.0.1"), getEnv("DB_PORT", "3306")),
-		DBName:     getEnv("DB_NAME", "ecom"),
+		DBConnStr:  getEnv("DB_CONN_STR", "postgres://root:password@localhost:5432/ecom?sslmode=disable"),
 	}
 }
-
 
 func getEnv(key, fallback string) string {
 	if value, exists := os.LookupEnv(key); exists {
