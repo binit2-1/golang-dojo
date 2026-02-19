@@ -6,3 +6,9 @@ test:
 
 run: build
 	@./bin/ecom
+
+db-up:
+	@docker-compose -f db.docker-compose.yaml up -d
+
+db-down:
+	@docker-compose -f db.docker-compose.yaml down
