@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
-
 	"github.com/binit2-1/golang-dojo/rest-api/services/user"
 	"github.com/gorilla/mux"
 )
