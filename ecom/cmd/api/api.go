@@ -23,7 +23,9 @@ func NewAPIServer(addr string, db *sql.DB) *APIServer{
 func (s *APIServer) Run() error{
 	router := mux.NewRouter() //If you want to change the router, you can do it here
 	subRouter := router.PathPrefix("/api/v1").Subrouter()
-	userHandler := user.NewHandler()
+
+	userStore :=user.NewStore(s.db)
+	userHandler := user.NewHandler(userStore)
 	userHandler.RegisterRoutes(subRouter)
 
 	log.Println("Listening on", s.addr)
