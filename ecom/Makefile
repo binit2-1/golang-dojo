@@ -2,7 +2,7 @@ build:
 	@go build -o bin/ecom cmd/main.go
 
 test:
-	@go test -v ./..
+	@go test -v ./...
 
 run: build
 	@./bin/ecom
