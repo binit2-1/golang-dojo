@@ -4,27 +4,28 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
-	"github.com/binit2-1/golang-dojo/rest-api/services/user"
+
+	"github.com/binit2-1/golang-dojo/ecom/services/user"
 	"github.com/gorilla/mux"
 )
 
-type APIServer struct{
+type APIServer struct {
 	addr string
-	db *sql.DB
+	db   *sql.DB
 }
 
-func NewAPIServer(addr string, db *sql.DB) *APIServer{
+func NewAPIServer(addr string, db *sql.DB) *APIServer {
 	return &APIServer{
 		addr: addr,
-		db: db,
+		db:   db,
 	}
 }
 
-func (s *APIServer) Run() error{
+func (s *APIServer) Run() error {
 	router := mux.NewRouter() //If you want to change the router, you can do it here
 	subRouter := router.PathPrefix("/api/v1").Subrouter()
 
-	userStore :=user.NewStore(s.db)
+	userStore := user.NewStore(s.db)
 	userHandler := user.NewHandler(userStore)
 	userHandler.RegisterRoutes(subRouter)
 

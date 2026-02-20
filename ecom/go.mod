@@ -1,4 +1,4 @@
-module github.com/binit2-1/golang-dojo/rest-api
+module github.com/binit2-1/golang-dojo/ecom
 
 go 1.25.7
 

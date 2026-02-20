@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/binit2-1/golang-dojo/rest-api/cmd/api"
-	"github.com/binit2-1/golang-dojo/rest-api/config"
-	psqlDb "github.com/binit2-1/golang-dojo/rest-api/db"
+	"github.com/binit2-1/golang-dojo/ecom/cmd/api"
+	"github.com/binit2-1/golang-dojo/ecom/config"
+	psqlDb "github.com/binit2-1/golang-dojo/ecom/db"
 )
 
 func main() {

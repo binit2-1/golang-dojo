@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/binit2-1/golang-dojo/rest-api/services/auth"
-	"github.com/binit2-1/golang-dojo/rest-api/types"
-	"github.com/binit2-1/golang-dojo/rest-api/utils"
+	"github.com/binit2-1/golang-dojo/ecom/services/auth"
+	"github.com/binit2-1/golang-dojo/ecom/types"
+	"github.com/binit2-1/golang-dojo/ecom/utils"
 	"github.com/gorilla/mux"
 )
 
