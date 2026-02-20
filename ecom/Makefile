@@ -12,3 +12,6 @@ db-up:
 
 db-down:
 	@docker-compose -f db.docker-compose.yaml down
+
+db-it:
+	@docker exec -it ecom-dev-db psql -U ecom-admin -d ecom-db
