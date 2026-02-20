@@ -7,6 +7,7 @@ import (
 	"github.com/binit2-1/golang-dojo/ecom/services/auth"
 	"github.com/binit2-1/golang-dojo/ecom/types"
 	"github.com/binit2-1/golang-dojo/ecom/utils"
+	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 )
 
@@ -34,6 +35,12 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request){
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return
 	}
+
+	//validate payload
+	 if err := utils.Validate.Struct(payload); err != nil {
+		errors := err.(validator.ValidationErrors)
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("Invalid Payload %v", errors))
+	 }
 
 	//check if the user already exists
 	_, err := h.store.GetUserByEmail(payload.Email)
