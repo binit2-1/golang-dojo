@@ -1,8 +1,10 @@
 package ui
 
-type Model struct{
-	CPUUsage float64
+type Model struct {
+	CPUUsage    float64
 	MemoryUsage float64
-	err error
+	Width 		int
+	Height 		int
+	err         error
 }
 

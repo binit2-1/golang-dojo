@@ -1,10 +1,10 @@
 package ui
 
-import "fmt"
-
 
 
 func (m Model) View() (string){
-	s := fmt.Sprintf("CPU Usage %v", m.CPUUsage )
-	return s
+	titleBox := TitleStyle.Render("SYSTEM MONITOR DASHBOARD")
+	container := ContainerStyle.Width(m.Width).Height(m.Height)
+
+	return container.Render(titleBox)
 }
