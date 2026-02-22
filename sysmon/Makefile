@@ -1,5 +1,5 @@
 build:
-	@go build -o bin/sysmon cmd/main.go
+	@go build -o bin/sysmon cmd/sysmon/main.go
 
 test:
 	@go test -v ./...
