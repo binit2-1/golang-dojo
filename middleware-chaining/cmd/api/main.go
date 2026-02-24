@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
 )
 
 
@@ -13,13 +12,13 @@ import (
 
 func main(){
 	//new router
-	mux := mux.NewRouter()
+	mux := http.NewServeMux()
 
 	//health route
-	mux.HandleFunc("/v1/health", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET /v1/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"messages:Health OK...}`))
+		w.Write([]byte(`{"message": "Health OK"}`))
 	} )
 
 	//port
