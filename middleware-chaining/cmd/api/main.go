@@ -20,8 +20,11 @@ func main(){
 		w.Write([]byte(`{"message": "Health OK"}`))
 	} )
 	
+	//Rate limiter
+	limiter := middleware.NewRateLimiter()
+
 	//wrapped the mux with the middleware
-	wrappedMux := middleware.LogRequest(mux)
+	wrappedMux := middleware.LogRequest(limiter.Limit(mux))
 
 	//port
 	port := ":8080"
