@@ -1,6 +1,7 @@
 package server
 
 import (
+	"log"
 	"context"
 	"net/http"
 )
@@ -9,6 +10,7 @@ type ContextKey string
 
 func(s *Server) RequireAuth(next http.Handler) http.Handler{
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println("--> ENTERED REQUIRE AUTH MIDDLEWARE")
 		cookie, err := r.Cookie("session_id")
 		if err!=nil{
 			http.Error(w, "Invalid Credentials", http.StatusUnauthorized)

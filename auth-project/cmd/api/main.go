@@ -26,6 +26,7 @@ func main(){
 	})
 
 	mux.HandleFunc("POST /v1/login", srv.LoginHandler)
+	mux.Handle("GET /v1/dashboard", srv.RequireAuth(http.HandlerFunc(srv.DashBoardHandler)))
 
 
 	port := ":8080"

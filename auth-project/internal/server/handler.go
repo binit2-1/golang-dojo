@@ -63,3 +63,16 @@ func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Write([]byte(`{"message":"Login Successful"}`))
 }
+
+func(s *Server) DashBoardHandler(w http.ResponseWriter, r *http.Request){
+
+	email := r.Context().Value(ContextKey("userEmail"))
+
+	emailStr, ok := email.(string)
+	if !ok {
+        http.Error(w, "Failed to parse user email", http.StatusInternalServerError)
+        return
+    }
+
+    w.Write([]byte("Welcome to the secret dashboard, " + emailStr))
+}
