@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/binit2-1/golang-dojo/middleware-chaining/internal/middleware"
 )
 
 
@@ -18,12 +19,15 @@ func main(){
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message": "Health OK"}`))
 	} )
+	
+	//wrapped the mux with the middleware
+	wrappedMux := middleware.LogRequest(mux)
 
 	//port
 	port := ":8080"
 	fmt.Printf("Starting Server on port %s\n", port)
 	
-	err := http.ListenAndServe(port, mux)
+	err := http.ListenAndServe(port, wrappedMux)
 	if err != nil{
 		log.Fatalf("Failed to start server: %v", err)
 	}
