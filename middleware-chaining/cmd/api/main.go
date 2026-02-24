@@ -8,8 +8,6 @@ import (
 )
 
 
-
-
 func main(){
 	//new router
 	mux := http.NewServeMux()
