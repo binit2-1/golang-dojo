@@ -5,9 +5,17 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/binit2-1/golang-dojo/auth-project/internal/database"
+	"github.com/binit2-1/golang-dojo/auth-project/internal/server"
 )
 
 func main(){
+
+	rdb := database.NewRedisClient() 
+	defer rdb.Close()
+
+	srv := server.NewServer(rdb)
+
 
 	mux := http.NewServeMux()
 
@@ -17,12 +25,11 @@ func main(){
 		w.Write([]byte(`{"messages":"auth-project up"}`))
 	})
 
+	mux.HandleFunc("POST /v1/login", srv.LoginHandler)
+
 
 	port := ":8080"
 	fmt.Printf("Starting Server on port %s\n", port)
-
-
-	
 
 
 	err := http.ListenAndServe(port, mux)
