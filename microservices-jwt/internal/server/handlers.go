@@ -16,37 +16,46 @@ type LoginResponse struct {
 	Token string `json:"token"`
 }
 
-type Server struct{
-	JWTSecret string 
+type Server struct {
+	JWTSecret string
 }
 
-func NewServer(secret string) *Server{
+func NewServer(secret string) *Server {
 	return &Server{
 		JWTSecret: secret,
 	}
 }
 
-func(s *Server) LoginHandler(w http.ResponseWriter, r *http.Request){
+func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	var req LoginRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
-	if err!=nil{
+	if err != nil {
 		http.Error(w, "Invalid JSON Payload", http.StatusBadRequest)
 		return
 	}
 
-
-	if req.Email != "test@gmail.com" || req.Password != "secret"{
+	if req.Email != "test@gmail.com" || req.Password != "secret" {
 		http.Error(w, "Invalid credentials", http.StatusUnauthorized)
 		return
 	}
 
 	token, err := jwtutil.GenerateToken(req.Email, s.JWTSecret)
 	if err != nil {
-    	http.Error(w, "Failed to generate token", http.StatusInternalServerError)
-    	return
+		http.Error(w, "Failed to generate token", http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(LoginResponse{Token: token})
+}
+
+func (s *Server) DashboardHandler(w http.ResponseWriter, r *http.Request) {
+
+	email := r.Context().Value(ContextKey("userEmail")).(string)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "Welcome to the secure microservice, " + email,
+	})
 }

@@ -38,6 +38,7 @@ func main() {
 		w.Write([]byte(`{"messages:"jwt project up"}`))
 	})
 	mux.HandleFunc("POST /v1/login", srv.LoginHandler)
+	mux.Handle("GET /v1/dashboard", srv.RequireJWT(http.HandlerFunc(srv.DashboardHandler)))
 
 	fmt.Printf("Starting Server on port%s\n", port)
 
