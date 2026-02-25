@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"log"
+	"net/http"
+	"os"
+
 	"github.com/binit2-1/golang-dojo/microservices-jwt/internal/middlewares"
+	"github.com/joho/godotenv"
 )
 
 
@@ -23,7 +26,9 @@ func main(){
 	})
 
 
-	port := ":8080"
+	godotenv.Load()
+
+	port := ":" + os.Getenv("PORT")
 	fmt.Printf("Starting Server on port%s\n", port)
 
 
