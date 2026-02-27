@@ -15,7 +15,7 @@ func main(){
 
 	err:=godotenv.Load()
 	if err!=nil{
-		fmt.Println("Couldn't Load env")
+		log.Println("Warning: No .env file found, relying on system environment variables")
 	}
 
 	dbConnectionURL := os.Getenv("DATABASE_URL")
@@ -25,11 +25,13 @@ func main(){
 	if err != nil{
 		log.Fatalf("Error opening database: %v", err)
 	}
+	defer db.Close()
 
 	err = db.Ping()
-	// This is where you catch actual connection errors (e.g., wrong credentials, network issues)
+	// catch actual connection errors (e.g., wrong credentials, network issues)
 	if err != nil{
 		log.Fatalf("Error pinging database: %v", err)
+		
 	}
 	fmt.Println("Successfully connected to the database!")
 }
