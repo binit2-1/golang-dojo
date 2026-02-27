@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"realtime-canvas/internal/server"
+	"realtime-canvas/internal/websocket"
 
 	"github.com/joho/godotenv"
 )
@@ -14,9 +15,17 @@ func main() {
 	godotenv.Load()
 	mux := http.NewServeMux()
 
-	port := os.Getenv("PORT")
+	hub := websocket.NewHub()
 
-	mux.HandleFunc("/ws", server.ServeWS)
+	go hub.Run()
+
+	port := os.Getenv("PORT")
+	
+	mux.Handle("/", http.FileServer(http.Dir("./public")))
+
+	mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		server.ServeWS(hub, w, r)
+	})
 
 	fmt.Printf("Server started at port%s\n", port)
 

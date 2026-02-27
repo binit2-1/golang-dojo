@@ -14,7 +14,7 @@ type Client struct {
 func (c *Client) ReadPump() {
 	// If this function exits, unregister the client and close the socket
 	defer func() {
-		c.Hub.unregister <- c
+		c.Hub.Unregister <- c
 		c.Conn.Close()
 	}()
 
@@ -25,7 +25,7 @@ func (c *Client) ReadPump() {
 			break
 		}
 
-		c.Hub.broadcast <- message
+		c.Hub.Broadcast <- message
 	}
 
 }
