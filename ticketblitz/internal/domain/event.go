@@ -9,4 +9,5 @@ type Event struct{
 
 type EventRepository interface{
 	GetEventByID(id string) (*Event, error)
+	CreateEvent(event *Event) error
 }

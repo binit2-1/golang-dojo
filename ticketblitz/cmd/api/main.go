@@ -4,10 +4,13 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
+	"ticketblitz/internal/repository/postgres"
+	"ticketblitz/internal/server"
 
-	"github.com/joho/godotenv"
 	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/joho/godotenv"
 )
 
 
@@ -19,6 +22,7 @@ func main(){
 	}
 
 	dbConnectionURL := os.Getenv("DATABASE_URL")
+	port := os.Getenv("PORT")
 
 	db, err := sql.Open("pgx", dbConnectionURL)
 	// sql.Open() only validates arguments, so this catches basic format errors
@@ -34,4 +38,28 @@ func main(){
 		
 	}
 	fmt.Println("Successfully connected to the database!")
+
+
+
+	eventRepo := postgres.NewPotgresEventRepo(db)
+
+
+	eventHandler := &server.EventHandler{
+		Repo: eventRepo,
+	}
+
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("POST /v1/events", eventHandler.CreateEvent)
+	fmt.Printf("server running on port%s\n", port)
+
+
+	err = http.ListenAndServe(port, mux)
+	if err!=nil{
+		log.Fatalf("Failed to start server: %v", err)
+	}
+
+	
+
+
 }
