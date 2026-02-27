@@ -1,5 +1,5 @@
 build:
-	@go build -o bin/ticketblitz cmd/ticketblitz/main.go
+	@go build -o bin/ticketblitz cmd/api/main.go
 
 test:
 	@go test -v ./...
