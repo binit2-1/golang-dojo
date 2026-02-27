@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: ticketblitz-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ticketblitz-admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: ticketblitz-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ticketblitz-data:/var/lib/postgresql/data
+
+volumes:
+  ticketblitz-data:
