@@ -11,7 +11,7 @@ type PostgresEventRepo struct {
 
 
 
-func NewPotgresEventRepo(db *sql.DB) domain.EventRepository {
+func NewPostgresEventRepo(db *sql.DB) domain.EventRepository {
 	return &PostgresEventRepo{
 		db: db,
 	}
