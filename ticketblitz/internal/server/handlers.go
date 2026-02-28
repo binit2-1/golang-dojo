@@ -51,3 +51,25 @@ func (h *EventHandler) GetEventByID(w http.ResponseWriter, r *http.Request){
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(event)
 }
+
+
+func (h *EventHandler) PurchaseTicket(w http.ResponseWriter, r *http.Request){
+	
+	var orders domain.Orders
+
+	err := json.NewDecoder(r.Body).Decode(&orders)
+	if err!=nil{
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	err = h.Repo.PurchaseTicket(orders.UserID, orders.EventID)
+	if err != nil{
+		http.Error(w, "Bad request", http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(orders)
+}

@@ -53,3 +53,15 @@ func (c *CachedEventRepo) GetEventByID(id string)(*domain.Event, error){
 
 	return event, nil
 }
+
+func(c *CachedEventRepo) PurchaseTicket(userID string, eventID string) error{
+	err := c.BaseRepo.PurchaseTicket(userID, eventID)
+	if err != nil{
+		return err
+	}
+
+	ctx := context.Background()
+	delKey := "event:" + eventID
+	
+	return  c.Client.Del(ctx, delKey).Err()
+}
