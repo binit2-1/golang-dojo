@@ -1,13 +1,17 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"ticketblitz/internal/repository/postgres"
+	"ticketblitz/internal/repository/cache"
+	"ticketblitz/internal/repository/pg"
 	"ticketblitz/internal/server"
+
+	"github.com/redis/go-redis/v9"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/joho/godotenv"
@@ -40,13 +44,23 @@ func main(){
 	}
 	fmt.Println("Successfully connected to the database!")
 
+	//REDIS CONNECTIONS
+	redisClient:= redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
+	})
+	if err := redisClient.Ping(context.Background()).Err(); err != nil{
+		log.Fatalf("Error pinging Redis: %v", err)
+	}
+	fmt.Println("Succesfully connected to Redis")
 
 
-	eventRepo := postgres.NewPotgresEventRepo(db)
+
+	pgRepo := pg.NewPotgresEventRepo(db)
+	cachedRepo := cache.NewCachedEventRepo(pgRepo, redisClient)
 
 
 	eventHandler := &server.EventHandler{
-		Repo: eventRepo,
+		Repo: cachedRepo,
 	}
 
 	//ROUTER
