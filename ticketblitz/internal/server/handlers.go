@@ -37,7 +37,7 @@ func (h *EventHandler) GetEventByID(w http.ResponseWriter, r *http.Request){
 
 	event, err := h.Repo.GetEventByID(id)
 	if err != nil{
-		http.Error(w, "No Events Found", http.StatusNotFound)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 

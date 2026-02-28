@@ -20,7 +20,7 @@ func NewPostgresEventRepo(db *sql.DB) domain.EventRepository {
 //GetEventByID implements [domain.EventRepository].
 func (h *PostgresEventRepo) GetEventByID(id string) (*domain.Event, error) {
 
-	query := `SELECT id, name, total_tickets, availed_tickets FROM events WHERE id=$1`
+	query := `SELECT id, name, total_tickets, available_tickets FROM events WHERE id=$1`
 
 	var event domain.Event
 
@@ -28,7 +28,7 @@ func (h *PostgresEventRepo) GetEventByID(id string) (*domain.Event, error) {
 		&event.ID,
 		&event.Name,
 		&event.TotalTickets,
-		&event.TotalTickets,
+		&event.AvailableTickets,
 	)
 
 	if err != nil {
@@ -46,7 +46,7 @@ func (h *PostgresEventRepo) CreateEvent(event *domain.Event) error {
 	
 	query:= `INSERT INTO events (name, total_tickets, available_tickets) VALUES ($1, $2, $3) RETURNING id`
 
-	err := h.db.QueryRow(query, &event.Name, &event.TotalTickets, &event.AvailedTickets).Scan(&event.ID)
+	err := h.db.QueryRow(query, &event.Name, &event.TotalTickets, &event.AvailableTickets).Scan(&event.ID)
 
 	return err
 }
