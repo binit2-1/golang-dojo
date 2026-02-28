@@ -24,13 +24,14 @@ func main(){
 	dbConnectionURL := os.Getenv("DATABASE_URL")
 	port := os.Getenv("PORT")
 
+
+	//POSTGRES CONNECTIONS
 	db, err := sql.Open("pgx", dbConnectionURL)
 	// sql.Open() only validates arguments, so this catches basic format errors
 	if err != nil{
 		log.Fatalf("Error opening database: %v", err)
 	}
 	defer db.Close()
-
 	err = db.Ping()
 	// catch actual connection errors (e.g., wrong credentials, network issues)
 	if err != nil{
@@ -48,8 +49,11 @@ func main(){
 		Repo: eventRepo,
 	}
 
+	//ROUTER
 	mux := http.NewServeMux()
 
+
+	//ROUTES
 	mux.HandleFunc("POST /v1/events", eventHandler.CreateEvent)
 	fmt.Printf("server running on port%s\n", port)
 
@@ -58,8 +62,4 @@ func main(){
 	if err!=nil{
 		log.Fatalf("Failed to start server: %v", err)
 	}
-
-	
-
-
 }
