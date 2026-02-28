@@ -1,9 +1,10 @@
 package server
 
 import (
+	"net"
 	"net/http"
 	"sync"
-	"net"
+	"time"
 
 	"golang.org/x/time/rate"
 )
@@ -38,5 +39,16 @@ func RateLimiterMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		next.ServeHTTP(w, r)
+	})
+}
+
+func MetricsMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		next.ServeHTTP(w, r)
+		duration := time.Since(start).Seconds()
+		
+		http_requests_total.Inc()
+		http_request_duration_seconds.WithLabelValues(r.Method, r.URL.Path).Observe(duration)
 	})
 }

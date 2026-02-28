@@ -13,9 +13,10 @@ import (
 	"ticketblitz/internal/repository/pg"
 	"ticketblitz/internal/server"
 
-	"github.com/redis/go-redis/v9"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/joho/godotenv"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/redis/go-redis/v9"
 )
 
 func main() {
@@ -92,9 +93,10 @@ func main() {
 	mux := http.NewServeMux()
 
 	// Register API endpoints
-	mux.HandleFunc("POST /v1/events", eventHandler.CreateEvent)
-	mux.HandleFunc("GET /v1/events/{id}", eventHandler.GetEventByID)
-	mux.HandleFunc("POST /v1/purchase", server.RateLimiterMiddleware(eventHandler.PurchaseTicket))
+	mux.Handle("/metrics", promhttp.Handler())
+	mux.HandleFunc("POST /v1/events", server.MetricsMiddleware(eventHandler.CreateEvent))
+	mux.HandleFunc("GET /v1/events/{id}", server.MetricsMiddleware(eventHandler.GetEventByID))
+	mux.HandleFunc("POST /v1/purchase", server.RateLimiterMiddleware(server.MetricsMiddleware(eventHandler.PurchaseTicket)))
 
 	// Start the server
 	fmt.Printf("🚀 Server running on port %s\n", port)
