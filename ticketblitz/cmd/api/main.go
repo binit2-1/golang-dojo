@@ -94,7 +94,7 @@ func main() {
 	// Register API endpoints
 	mux.HandleFunc("POST /v1/events", eventHandler.CreateEvent)
 	mux.HandleFunc("GET /v1/events/{id}", eventHandler.GetEventByID)
-	mux.HandleFunc("POST /v1/purchase", eventHandler.PurchaseTicket)
+	mux.HandleFunc("POST /v1/purchase", server.RateLimiterMiddleware(eventHandler.PurchaseTicket))
 
 	// Start the server
 	fmt.Printf("🚀 Server running on port %s\n", port)
